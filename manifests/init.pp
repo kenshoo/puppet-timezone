@@ -1,82 +1,32 @@
-# Class: timezone
+# == Class: timezone
 #
-# This module manages timezone settings
+# Sets server timezone.
 #
-# Parameters:
-#   [*timezone*]
-#     The name of the timezone.
-#     Default: UTC
+# === Parameters
 #
-#   [*ensure*]
-#     Ensure if present or absent.
-#     Default: present
+# [*timezone*]
+#  Timezone to use. Default: America/Los_Angeles
 #
-#   [*autoupgrade*]
-#     Upgrade package automatically, if there is a newer version.
-#     Default: false
+# === Examples
 #
-#   [*package*]
-#     Name of the package.
-#     Only set this, if your platform is not supported or you know, what you're doing.
-#     Default: auto-set, platform specific
+# class { 'timezone':
+#   timezone => 'America/New_York',
+# }
 #
-#   [*config_file*]
-#     Main configuration file.
-#     Only set this, if your platform is not supported or you know, what you're doing.
-#     Default: auto-set, platform specific
+# === Authors
 #
-#   [*zoneinfo_dir*]
-#     Source directory of zoneinfo files.
-#     Only set this, if your platform is not supported or you know, what you're doing.
-#     Default: auto-set, platform specific
+# Sergey Stankevich
 #
-# Actions:
-#   Installs tzdata and configures timezone
-#
-# Requires:
-#   Nothing
-#
-# Sample Usage:
-#   class { 'timezone':
-#     timezone => 'Europe/Berlin',
-#   }
-#
-# [Remember: No empty lines between comments and class definition]
 class timezone (
-  $timezone = 'UTC',
-  $ensure = 'present',
-  $autoupgrade = false,
-  $package = $timezone::params::package,
-  $config_file = $timezone::params::config_file,
-  $zoneinfo_dir = $timezone::params::zoneinfo_dir
-) inherits timezone::params {
+  $timezone = 'Etc/UTC'
+) {
 
-  case $ensure {
-    /(present)/: {
-      if $autoupgrade == true {
-        $package_ensure = 'latest'
-      } else {
-        $package_ensure = 'present'
-      }
-      $config_ensure = 'link'
-    }
-    /(absent)/: {
-      # Leave package installed, as it is a system dependency
-      $package_ensure = 'present'
-      $config_ensure = 'absent'
-    }
-    default: {
-      fail('ensure parameter must be present or absent')
-    }
+  # Module compatibility check
+  $compatible = [ 'Debian', 'Ubuntu' ]
+  if ! ($::operatingsystem in $compatible) {
+    fail("Module is not compatible with ${::operatingsystem}")
   }
 
-  package { $package:
-    ensure => $package_ensure,
-  }
+  include timezone::config
 
-  file { $config_file:
-    ensure  => $config_ensure,
-    target  => "${zoneinfo_dir}${timezone}",
-    require => Package[$package],
-  }
 }
