@@ -42,14 +42,14 @@
 #   }
 #
 # [Remember: No empty lines between comments and class definition]
-class localtime (
+class timezone::localtime (
   $timezone = 'UTC',
   $ensure = 'present',
   $autoupgrade = false,
-  $package = $localtime::params::package,
-  $config_file = $localtime::params::config_file,
-  $zoneinfo_dir = $localtime::params::zoneinfo_dir
-) inherits localtime::params {
+  $package = $timezone::params::package,
+  $config_file = $timezone::params::config_file,
+  $zoneinfo_dir = $timezone::params::zoneinfo_dir
+) inherits timezone::params {
 
   case $ensure {
     /(present)/: {

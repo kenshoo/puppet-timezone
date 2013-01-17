@@ -1,4 +1,4 @@
-class localtime::params {
+class timezone::params {
   case $::operatingsystem {
     /(Ubuntu|Debian)/: {
       $package = 'tzdata'

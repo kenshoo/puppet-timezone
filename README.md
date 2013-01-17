@@ -1,6 +1,7 @@
 # puppet-timezone
 
 Manage timezone settings via Puppet
+In order to change the linux date please use also the local time class
 
 ## Usage
 
@@ -16,6 +17,11 @@ Manage timezone settings via Puppet
     class { 'timezone':
         timezone => 'Europe/Berlin',
     }
+    
+
+    class { 'timezone::localtime':
+	timezone => 'Asia/Jerusalem',
+    }	
 ```
 
 ## Other class parameters
