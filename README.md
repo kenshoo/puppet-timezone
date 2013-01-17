@@ -1,13 +1,18 @@
 # puppet-timezone
 
-Manage timezone settings via Puppet
-In order to change the linux date please use also the local time class
+Manage timezone settings via Puppet.
+
+In order to change the linux date please also use the local time class.
 
 ## Usage
 
 ### Set timezone to UTC
 ```
     class { 'timezone':
+        timezone => 'UTC',
+    }
+    
+    class { 'timezone::localtime':
         timezone => 'UTC',
     }
 ```
@@ -19,8 +24,8 @@ In order to change the linux date please use also the local time class
     }
     
 
-    class { 'timezone::localtime':
-	timezone => 'Asia/Jerusalem',
+    class {'timezone::localtime':
+		timezone => 'Asia/Jerusalem',
     }	
 ```
 
